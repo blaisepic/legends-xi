@@ -9,9 +9,10 @@ legends = []
 players = []
 
 class Player:
-    def __init__(self, name, pos, attributes):
+    def __init__(self, name, pos, overall, attributes):
         self.name = name
         self.pos = pos
+        self.overall = overall
         self.attributes = attributes
 
 # called by toLinkFinder, gets all individual links to legend pages
@@ -49,11 +50,11 @@ def getSoup(url):
     soup = BeautifulSoup(page.content, "html.parser")
     return soup
 
+# this is where the magic happens
 def getAttributes(url): # given a link for a player, find that players attributes
     soup = getSoup(url)
     attributes = {}
-    name = ""
-    pos = []
+    name, pos, overall = "", [], 0
     nameList, attList = [], []
 
     masonry = soup.select('span[class*="badge"]')
@@ -83,10 +84,11 @@ def getAttributes(url): # given a link for a player, find that players attribute
 
         if idx == 1:
             name = getName(attribute)
+            overall = regexp_tokenize(e.parent.parent.text, "[\d]+")[0]
         if idx == 2: 
             pos = getPosition(attribute)
 
-    return Player(name, pos, attributes)
+    return Player(name, pos, overall, attributes)
 
 
 def getName(string):
@@ -118,19 +120,18 @@ def main():
     "https://www.fifaindex.com/players/fifa05_1/?page=4"]
     toLinkFinder(playerList, False)
 
-    # player = getAttributes(legendLinks[3])
-    # print(player.name)
-    # print(player.pos)
-    # for link in legendLinks:
-    #     legends.append(getAttributes(link))
+    for link in legendLinks:
+        legends.append(getAttributes(link))
 
-    for link in playerLinks:
-        players.append(getAttributes(link))
+    # for link in playerLinks:
+    #     players.append(getAttributes(link))
 
-    for player in players:
+    for player in legends:
         print(player.name)
         print(player.pos)
+        print(player.overall)
         print(player.attributes)
+        print("________________________")
 
 
 if __name__ == "__main__":
