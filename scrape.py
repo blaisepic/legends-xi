@@ -11,12 +11,6 @@ legends = []
 players = []
 key = 0
 
-password = getpass.getpass("Password: ")
-conn = psycopg2.connect("host=localhost dbname=fifa user=blaise password=" + password)
-cur = conn.cursor()
-print("executing...")
-
-
 class Player:
     def __init__(self, key, name, pos, overall, attributes):
         self.key = key
@@ -100,18 +94,22 @@ def getAttributes(url): # given a link for a player, find that players attribute
 
     global key
     key += 1
-    return Player(key, name, pos, overall, attributes)
+    return Player(key, name, pos, overall, compressAttributes(attributes))
 
+def getListOfAttributes(attributes):
+    dict = []
+    for e in attributes:
+        dict.append(e)
+
+    return dict
 
 def getName(string):
     arr = re.split("\d", string)
     return arr[0]
 
-
 def getPosition(pos):
     posSplit = "GK|RB|RWB|LB|LWB|CB|CDM|CM|CAM|RW|LW|RM|LM|CF|ST"
     return regexp_tokenize(pos, posSplit)
-
 
 # pass this function a list of the pages containing the players (or legends)
 def toLinkFinder(listOfLinks, ifLegend):
@@ -120,6 +118,59 @@ def toLinkFinder(listOfLinks, ifLegend):
             legendLinkFinder(link)
         else:
             playerLinkFinder(link)
+
+def createTable():
+    password = getpass.getpass("Password: ")
+    conn = psycopg2.connect("host=localhost dbname=fifa user=blaise password=" + password)
+    cur = conn.cursor()
+    print("executing...")
+    cur.execute("""
+        CREATE TABLE legends(
+            id integer PRIMARY KEY,
+            name text,
+            pos text,
+            overall integer,
+            ball_skills integer,
+            defence integer,
+            mental integer,
+            passing integer,
+            physical integer,
+            shooting integer,
+            goalkeeper integer
+    )
+    """)
+
+    conn.commit()
+
+# TODO: differentiate between legend and player compress functions
+# takes all the attributes and compresses them into 7 primary categories
+def compressAttributes(att): 
+    newAttributes = {}
+    newAttributes["ball_skills"] = round((att["Ball Control"] + 
+    att["Dribbling"]) / 2, 0)
+
+    newAttributes["defence"] = round((att["Marking"] + att["Slide Tackle"] + 
+    att["Stand Tackle"]) / 3, 0)
+
+    newAttributes["mental"] = round((att["Aggression"] + att["Reactions"] +
+    att["Att. Position"] + att["Interceptions"] + att["Vision"] + 
+    att["Composure"]) / 6, 0)
+
+    newAttributes["passing"] = round((att["Crossing"] + att["Short Pass"] +
+    att["Long Pass"]) / 3, 0)
+
+    newAttributes["physical"] = round((att["Acceleration"] + att["Stamina"] + 
+    att["Strength"] + att["Balance"] + att["Sprint Speed"] + 
+    att["Agility"] + att["Jumping"]) / 7, 0)
+
+    newAttributes["shooting"] = round((att["Heading"] + att["Shot Power"] + 
+    att["Finishing"] + att["Long Shots"] + att["Curve"] + 
+    att["FK Acc."] + att["Penalties"] + att["Volleys"]) / 8, 0)
+
+    newAttributes["goalkeeper"] = round((att["GK Positioning"] + att["GK Diving"] + 
+    att["GK Handling"] + att["GK Kicking"] + att["GK Reflexes"]) / 5, 0)
+
+    return newAttributes
 
 def main():
     legendList = ["https://www.fifaindex.com/players/?order_by=overallrating&order=0", 
@@ -132,19 +183,24 @@ def main():
     "https://www.fifaindex.com/players/fifa05_1/?page=4"]
     toLinkFinder(playerList, False)
 
-    for link in legendLinks:
-        legends.append(getAttributes(link))
+    # for link in legendLinks:
+    #     legends.append(getAttributes(link))
+
+    # createTable()
 
     # # for link in playerLinks:
     # #     players.append(getAttributes(link))
 
-    for player in legends:
-        print(player.key)
-        print(player.name)
-        print(player.pos)
-        print(player.overall)
-        print(player.attributes)
-        print("________________________")
+    # listOfAttributes = getListOfAttributes(legends[0].attributes)
+    # print(listOfAttributes)
+
+    # for player in legends:
+    #     print(player.key)
+    #     print(player.name)
+    #     print(player.pos)
+    #     print(player.overall)
+    #     print(player.attributes)
+    #     print("________________________")
 
 
 if __name__ == "__main__":
