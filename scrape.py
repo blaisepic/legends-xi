@@ -2,14 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from nltk.tokenize import regexp_tokenize
+import psycopg2
+import getpass
 
 legendLinks = []
 playerLinks = []
 legends = []
 players = []
+key = 0
+
+password = getpass.getpass("Password: ")
+conn = psycopg2.connect("host=localhost dbname=fifa user=blaise password=" + password)
+cur = conn.cursor()
+print("executing...")
+
 
 class Player:
-    def __init__(self, name, pos, overall, attributes):
+    def __init__(self, key, name, pos, overall, attributes):
+        self.key = key
         self.name = name
         self.pos = pos
         self.overall = overall
@@ -88,7 +98,9 @@ def getAttributes(url): # given a link for a player, find that players attribute
         if idx == 2: 
             pos = getPosition(attribute)
 
-    return Player(name, pos, overall, attributes)
+    global key
+    key += 1
+    return Player(key, name, pos, overall, attributes)
 
 
 def getName(string):
@@ -123,10 +135,11 @@ def main():
     for link in legendLinks:
         legends.append(getAttributes(link))
 
-    # for link in playerLinks:
-    #     players.append(getAttributes(link))
+    # # for link in playerLinks:
+    # #     players.append(getAttributes(link))
 
     for player in legends:
+        print(player.key)
         print(player.name)
         print(player.pos)
         print(player.overall)
