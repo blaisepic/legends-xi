@@ -55,7 +55,7 @@ def getSoup(url):
     return soup
 
 # this is where the magic happens
-def getAttributes(url): # given a link for a player, find that players attributes
+def getAttributes(url, isLegend): # given a link for a player, find that players attributes
     soup = getSoup(url)
     attributes = {}
     name, pos, overall = "", [], 0
@@ -94,7 +94,12 @@ def getAttributes(url): # given a link for a player, find that players attribute
 
     global key
     key += 1
-    return Player(key, name, pos, overall, compressAttributes(attributes))
+    if isLegend: attributes = compressAttributesLegends(attributes)
+    else: 
+        attributes = compressAttributesPlayers(attributes)
+        overall = int(overall) - 3 # account for inflated player ratings
+    # ball_skills, defence, mental, passing, physical, shooting, goalkeeper = compressAttributes(attributes)
+    return Player(key, name, pos, overall, attributes)
 
 def getListOfAttributes(attributes):
     dict = []
@@ -142,9 +147,25 @@ def createTable():
 
     conn.commit()
 
-# TODO: differentiate between legend and player compress functions
+def insertIntoTable(players):
+    password = getpass.getpass("Password: ")
+    conn = psycopg2.connect("host=localhost dbname=fifa user=blaise password=" + password)
+    cur = conn.cursor()
+    print("executing...")
+    for player in players:
+        insert_query1 = "Insert into legends VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" 
+        insert_query2 = (player.key, player.name, player.pos, player.overall, 
+        player.attributes["ball_skills"], player.attributes["defence"], 
+        player.attributes["mental"], player.attributes["passing"], 
+        player.attributes["physical"], player.attributes["shooting"], 
+        player.attributes["goalkeeper"])
+
+        cur.execute(insert_query1, insert_query2)
+
+    conn.commit()
+
 # takes all the attributes and compresses them into 7 primary categories
-def compressAttributes(att): 
+def compressAttributesLegends(att): 
     newAttributes = {}
     newAttributes["ball_skills"] = round((att["Ball Control"] + 
     att["Dribbling"]) / 2, 0)
@@ -172,6 +193,44 @@ def compressAttributes(att):
 
     return newAttributes
 
+# I subtract 3 overall here since the players back then had inflated ratings
+# to achieve this, I found the difference between a 90 and an 87
+# in overall stat totals (~35) in Fifa and spread that difference 
+# among the 7 primary stats below
+def compressAttributesPlayers(att): 
+    newAttributes = {}
+    newAttributes["ball_skills"] = round(((att["Ball Control"] + 
+    att["Dribbling"]) / 2)-5, 0)
+
+    newAttributes["defence"] = round(((att["Marking"] + att["Tackling"])
+    / 2)-5, 0)
+
+    newAttributes["mental"] = round(((att["Aggression"] + att["Anticipation"] +
+    att["Composure"] + att["Creativity"]) / 4)-5, 0)
+
+    newAttributes["passing"] = round(((att["Crossing"] + att["Passing"] +
+    att["Long Balls"]) / 3)-5, 0)
+
+    newAttributes["physical"] = round(((att["Acceleration"] + att["Pace"] + 
+    att["Stamina"] + att["Strength"] + att["Balance"]) / 5)-5, 0)
+
+    newAttributes["shooting"] = round(((att["Heading"] + att["Shot Accuracy"] + 
+    att["Shot Power"]) / 3)-5, 0)
+
+    newAttributes["goalkeeper"] = round(((att["GK Positioning"] + att["Reflexes"] + 
+    att["Rushing"] + att["Handling"]) / 4)-5, 0)
+
+    return newAttributes
+
+def printPlayers(players):
+    for player in players:
+        print(player.key)
+        print(player.name)
+        print(player.pos)
+        print(player.overall)
+        print(player.attributes)
+        print("________________________")
+
 def main():
     legendList = ["https://www.fifaindex.com/players/?order_by=overallrating&order=0", 
     "https://www.fifaindex.com/players/?page=2&order_by=overallrating&order=0"]
@@ -183,24 +242,16 @@ def main():
     "https://www.fifaindex.com/players/fifa05_1/?page=4"]
     toLinkFinder(playerList, False)
 
-    # for link in legendLinks:
-    #     legends.append(getAttributes(link))
+    for link in legendLinks:
+        legends.append(getAttributes(link, True))
 
     # createTable()
 
-    # # for link in playerLinks:
-    # #     players.append(getAttributes(link))
+    for link in playerLinks:
+        players.append(getAttributes(link, False))
 
-    # listOfAttributes = getListOfAttributes(legends[0].attributes)
-    # print(listOfAttributes)
-
-    # for player in legends:
-    #     print(player.key)
-    #     print(player.name)
-    #     print(player.pos)
-    #     print(player.overall)
-    #     print(player.attributes)
-    #     print("________________________")
+    insertIntoTable(legends)
+    insertIntoTable(players)
 
 
 if __name__ == "__main__":
