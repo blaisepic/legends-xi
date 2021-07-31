@@ -9,7 +9,7 @@ legendLinks = []
 playerLinks = []
 legends = []
 players = []
-key = 0
+key = 104
 
 class Player:
     def __init__(self, key, name, pos, overall, attributes):
@@ -94,7 +94,9 @@ def getAttributes(url, isLegend): # given a link for a player, find that players
 
     global key
     key += 1
-    if isLegend: attributes = compressAttributesLegends(attributes)
+    if isLegend: 
+        attributes = compressAttributesModernPlayers(attributes)
+        overall = int(overall) - 4
     else: 
         attributes = compressAttributesPlayers(attributes)
         overall = int(overall) - 3 # account for inflated player ratings
@@ -130,7 +132,7 @@ def createTable():
     cur = conn.cursor()
     print("executing...")
     cur.execute("""
-        CREATE TABLE legends(
+        CREATE TABLE players(
             id integer PRIMARY KEY,
             name text,
             pos text,
@@ -153,7 +155,7 @@ def insertIntoTable(players):
     cur = conn.cursor()
     print("executing...")
     for player in players:
-        insert_query1 = "Insert into legends VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" 
+        insert_query1 = "Insert into players VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" 
         insert_query2 = (player.key, player.name, player.pos, player.overall, 
         player.attributes["ball_skills"], player.attributes["defence"], 
         player.attributes["mental"], player.attributes["passing"], 
@@ -219,6 +221,38 @@ def compressAttributesPlayers(att):
 
     newAttributes["goalkeeper"] = round(((att["GK Positioning"] + att["Reflexes"] + 
     att["Rushing"] + att["Handling"]) / 4)-5, 0)
+
+    return newAttributes
+
+# I subtract 3 overall here since the players back then had inflated ratings
+# to achieve this, I found the difference between a 90 and an 87
+# in overall stat totals (~35) in Fifa and spread that difference 
+# among the 7 primary stats below
+def compressAttributesModernPlayers(att): 
+    newAttributes = {}
+    newAttributes["ball_skills"] = round(((att["Ball Control"] + 
+    att["Dribbling"]) / 2)-5, 0)
+
+    newAttributes["defence"] = round(((att["Marking"] + att["Slide Tackle"] + 
+    att["Stand Tackle"]) / 3)-5, 0)
+
+    newAttributes["mental"] = round(((att["Aggression"] + att["Reactions"] +
+    att["Att. Position"] + att["Interceptions"] + att["Vision"] + 
+    att["Composure"]) / 6)-5, 0)
+
+    newAttributes["passing"] = round(((att["Crossing"] + att["Short Pass"] +
+    att["Long Pass"]) / 3)-5, 0)
+
+    newAttributes["physical"] = round(((att["Acceleration"] + att["Stamina"] + 
+    att["Strength"] + att["Balance"] + att["Sprint Speed"] + 
+    att["Agility"] + att["Jumping"]) / 7)-5, 0)
+
+    newAttributes["shooting"] = round(((att["Heading"] + att["Shot Power"] + 
+    att["Finishing"] + att["Long Shots"] + att["Curve"] + 
+    att["FK Acc."] + att["Penalties"] + att["Volleys"]) / 8)-5, 0)
+
+    newAttributes["goalkeeper"] = round(((att["GK Positioning"] + att["GK Diving"] + 
+    att["GK Handling"] + att["GK Kicking"] + att["GK Reflexes"]) / 5)-5, 0)
 
     return newAttributes
 
