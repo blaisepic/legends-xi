@@ -1,0 +1,147 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2fr 8fr;
+    grid-template-areas:
+    "team-info team-data"
+    "field player-data"
+    ;
+
+    background-color:rebeccapurple;
+}
+
+.team-info-container {
+    grid-area: team-info;
+    display: grid;
+    justify-items: end;
+    align-items: end;   
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "team-name"
+    "jersey-color"
+    ;
+    background-color: pink;
+}
+
+.field {
+    grid-area: field;
+    display: grid;
+    grid-template-rows: 2fr 2fr 1fr 2fr 2fr;
+    grid-template-areas:
+    "..."
+    "forwards"
+    "midfielders"
+    "defenders"
+    "goalkeeper"
+    ;
+
+    background: url("https://i.pinimg.com/originals/d7/b0/55/d7b05539aac8c5416c73ca046f977742.jpg") bottom center;
+    background-size: 70% 100%;
+    background-repeat: no-repeat;
+}
+
+.player-data-container {
+    grid-area: player-data;
+    
+    
+    border: .5rem solid black;
+}
+
+#teamInput {
+    background-color: red;
+    grid-area: team-name;
+    width: 10vw;
+    min-width: 50px;
+}
+
+#jerseyColor {
+    grid-area: "jersey-color";
+}
+
+label{
+    font-size: 2rem;
+}
+
+.circle {
+    min-height: 2rem;
+    min-width: 2rem;
+    border-radius: 50%;
+    background-color: black;
+    transition: .5s ease;
+}
+
+.flex-box {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-self: center;
+}
+
+.goalkeeper {
+    grid-area: goalkeeper;
+    justify-self: center;
+    align-self: center;
+}
+
+.defense {
+    grid-area: defenders;
+    justify-content: center;
+    align-items: flex-end;
+
+}
+
+.defender {
+    margin: 5.3vh;
+    margin-bottom: 3vh;
+}
+
+.midfield {
+    grid-area: midfielders;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.midfielder {
+    margin: 4vh;
+    margin-bottom: 0;
+}
+
+.offense {
+    grid-area: forwards;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.forward {
+    margin: 5.3vh;
+    margin-bottom: 2rem;
+}
+
+.team-data-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "players-selected submit"
+    "budget submit"
+    ;
+    background: gray;
+}
+
+.players-selected {
+    grid-area: players-selected;
+}
+
+.budget {
+    grid-area: budget;
+}
