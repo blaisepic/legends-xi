@@ -263,7 +263,6 @@ def printPlayers(players):
         print(player.pos)
         print(player.overall)
         print(player.attributes)
-        print("________________________")
 
 def main():
     legendList = ["https://www.fifaindex.com/players/?order_by=overallrating&order=0", 
@@ -284,8 +283,12 @@ def main():
     for link in playerLinks:
         players.append(getAttributes(link, False))
 
-    insertIntoTable(legends)
-    insertIntoTable(players)
+    printPlayers(legends)
+    print("_________________")
+    printPlayers(players)
+
+    # insertIntoTable(legends)
+    # insertIntoTable(players)
 
 
 if __name__ == "__main__":

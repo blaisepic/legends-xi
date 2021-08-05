@@ -50,13 +50,6 @@ html, body {
     background-repeat: no-repeat;
 }
 
-.player-data-container {
-    grid-area: player-data;
-    
-    
-    border: .5rem solid black;
-}
-
 #teamInput {
     background-color: red;
     grid-area: team-name;
@@ -144,4 +137,71 @@ label{
 
 .budget {
     grid-area: budget;
+}
+
+.player-data-container {
+    grid-area: player-data;
+
+    display: grid;
+    grid-template-rows: minmax(30px, 100px) minmax(30px, 50px) auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "navbar"
+    "freeze-pane"
+    "scroll-list"
+    ;
+}
+
+.name {
+    /* grid-area: name; */
+}
+
+.pos {
+    /* grid-area: pos; */
+}
+
+.ovr {
+    /* grid-area: ovr; */
+}
+
+.freeze-pane {
+    grid-area: freeze-pane;
+
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 3fr 1fr 1fr;
+    align-items: center;
+}
+
+.freeze-pane-item {
+    border: black solid .3rem;
+    padding-left: 1rem;
+    height: 100%;
+    font-size: 2rem;
+}
+
+.scroller {
+    margin: 0 auto;
+    height: 50rem;
+    width: 100%;
+    overflow: auto;
+    grid-area: scroll-list;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(auto-fill, 50px);
+    /* grid-auto-rows: 50px; */
+}
+
+.item {
+    margin: 1rem;
+    padding-left: 1rem;
+    font-size: 1.5rem;
+}
+
+.test {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "name pos ovr";
 }

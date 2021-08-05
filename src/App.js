@@ -1,13 +1,12 @@
 import './style.css';
 import React, {Component} from 'react';
-//import ReactScrollableList from 'react-scrollable-list';
+// import ReactScrollableList from './components/scrollable';
+import './Data';
+import {listVals} from './Data';
+import {listKeys} from './Data';
 
-
-let listItems = []
-for (let i = 0; i < 10000; i++) {
-  listItems.push({ id: i, content: i })
-}
-
+//for access, make the div's #id the key in the listItems dict.
+// use that key to access the item somehow..
 
 
 class App extends Component {
@@ -100,12 +99,57 @@ class PlayerData extends Component {
   render() {
     return(
       <div className="player-data-container">
-        <ReactScrollableList
-            listItems={listItems}
-            heightOfItem={30}
-            maxItemsToRender={20}
-            style={{ color: '#333' }}
-          />
+        <FreezePane></FreezePane>
+        <ScrollList></ScrollList>
+      </div>
+    );
+  }
+}
+
+class FreezePane extends Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+    return(
+      <div className="freeze-pane">
+        <div className="freeze-pane-item">Name</div>
+        <div className="freeze-pane-item">Pos</div>
+        <div className="freeze-pane-item">Price</div>
+      </div>
+    );
+  }
+}
+// TODO: 
+  // 1. freeze top pane -- use grid-container implementation
+  // 2. columns, actual columns (..or, whole objects with illusion of cols)
+  // 3. styling
+  // 4. size (can I make it 100%?)
+  // 5. replace 'id' with 'key'
+  // test: If I click Pele's name, can I access all of his data?
+    // this would allow me to separate the player data into three columns
+class ScrollList extends Component {
+  constructor() {
+    super();
+  }
+ //TODO: I need to make the second row start on the second row!
+  render() {
+    let count = 0;
+    return(
+      <div className="scroller">
+        {listVals.map((player) => {
+          let id = listKeys[count];
+          count += 1;
+          return(
+            <div key={id} className="test">
+              <div id={id} className="item name">{player[0]}</div>
+              <div className="item pos">{player[1]}</div>
+              <div className="item ovr">{player[2]}</div>
+            </div>
+
+          );
+        })}
       </div>
     );
   }
