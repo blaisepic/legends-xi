@@ -4,6 +4,11 @@ import React, {Component} from 'react';
 import './Data';
 import {listVals} from './Data';
 import {listKeys} from './Data';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import BasicTable from './components/BasicTable';
+import FilteringTable from './components/FilteringTable';
 
 //for access, make the div's #id the key in the listItems dict.
 // use that key to access the item somehow..
@@ -26,7 +31,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container" id="container">
         <TeamInfo parentCallback = {this.handleCallback}></TeamInfo>
         <TeamData></TeamData>
         <Field parentData = {this.state.jerseyColor}></Field>
@@ -92,65 +97,127 @@ class PlayerData extends Component {
     super();
 
     this.state = {
-
+      filterByPos: "",
     };
+  }
+
+  handleCallback = (childData) => {
+    this.setState({filterByPos: childData});
   }
 
   render() {
     return(
       <div className="player-data-container">
-        <FreezePane></FreezePane>
-        <ScrollList></ScrollList>
+        {/* <FreezePane parentCallback = {this.handleCallback}></FreezePane> */}
+        <ScrollList parentData={this.state.filterByPos}></ScrollList>
       </div>
     );
   }
 }
 
 class FreezePane extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      
+    }
+  }
+
+  handleCallback = (childData) => {
+    this.props.parentCallback(childData)
   }
 
   render() {
     return(
       <div className="freeze-pane">
         <div className="freeze-pane-item">Name</div>
-        <div className="freeze-pane-item">Pos</div>
+        <div className="freeze-pane-item">
+          <PosFilter parentCallback = {this.handleCallback} className="freeze-pane-item"></PosFilter>
+        </div>
         <div className="freeze-pane-item">Price</div>
       </div>
     );
   }
 }
 // TODO: 
-  // 1. freeze top pane -- use grid-container implementation
-  // 2. columns, actual columns (..or, whole objects with illusion of cols)
   // 3. styling
-  // 4. size (can I make it 100%?)
-  // 5. replace 'id' with 'key'
+  // 4. filter by position
   // test: If I click Pele's name, can I access all of his data?
     // this would allow me to separate the player data into three columns
 class ScrollList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterByPos: "",
+    }
   }
- //TODO: I need to make the second row start on the second row!
+
+  componentDidUpdate = (prevProps) => {
+    if(this.props.parentData !== prevProps.parentData){
+      this.setState({filterByPos: this.props.parentData});
+      this.handleChange(this.props.parentData);
+    }
+  }
+
+  handleChange = (filterByPos) => { // how to filter? re-render?
+
+  }
+
   render() {
     let count = 0;
     return(
       <div className="scroller">
-        {listVals.map((player) => {
-          let id = listKeys[count];
-          count += 1;
-          return(
-            <div key={id} className="test">
-              <div id={id} className="item name">{player[0]}</div>
-              <div className="item pos">{player[1]}</div>
-              <div className="item ovr">{player[2]}</div>
-            </div>
-
-          );
-        })}
+        <FilteringTable id="table"></FilteringTable>
+        {/* <BasicTable id="table"></BasicTable> */}
       </div>
+      // <div className="scroller">
+      //   {listVals.map((player) => {
+      //     let id = listKeys[count];
+      //     count += 1;
+      //     return(
+      //       // <div key={id} className="player-container" data-key={player[1]}>
+      //       //   <div id={id} className="item name">{player[0]}</div>
+      //       //   <div className="item pos">{player[1]}</div>
+      //       //   <div className="item ovr">{player[2]}</div>
+      //       // </div>
+      //       // <BasicTable></BasicTable>
+
+      //     );
+      //   })}
+      // </div>
+    );
+  }
+}
+
+// TODO: pass PosFilter (the filtered position selected) => FreezePane; FreezePane => PlayerData; PlayerData =>> ScrollList
+// once in ScrollList, we will have the position the user wants to filter for. At that pt, we can filter in ScrollList. Thus, what we pass up to 
+// ScrollList is a variable containing the pos. We only pass that variable on click
+class PosFilter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterByPos: "",
+    };
+  }
+
+  handleClick = (e) => {
+    console.log(e.target.outerText);
+    this.setState({filterByPos: e.target.outerText});
+    this.props.parentCallback(e.target.outerText);
+    
+  }
+
+  render() {
+    return(
+        <DropdownButton id="dropdown-basic-button" title="Pos">
+          <Dropdown.Item href="#/action-1" onClick={this.handleClick}>F</Dropdown.Item>
+          <Dropdown.Item href="#/action-2" onClick={this.handleClick}>MID</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">DEF</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">GK</Dropdown.Item>
+        </DropdownButton>
     );
   }
 }
@@ -178,12 +245,7 @@ class TeamInput extends Component {
   }
 }
 
-// The value of an <input> element of type color is always a DOMString which
-//  contains a 7-character string specifying an RGB color in hexadecimal 
-//  format. While you can input the color in either upper- or lower-case, 
-//  it will be stored in lower-case form. 
-// ex: red = '#ff0000'
-// TODO: pass color to parent
+// ex value: red = '#ff0000'
 class JerseyColor extends Component {
   constructor(props) {
     super(props);

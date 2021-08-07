@@ -20,6 +20,14 @@ html, body {
     background-color:rebeccapurple;
 }
 
+#container {
+    margin: 0;
+    /* margin-left: 200px;
+    margin-right: 200px; */
+    padding: 0;
+    max-width: 100vw;
+}
+
 .team-info-container {
     grid-area: team-info;
     display: grid;
@@ -143,11 +151,12 @@ label{
     grid-area: player-data;
 
     display: grid;
-    grid-template-rows: minmax(30px, 100px) minmax(30px, 50px) auto;
+    /* grid-template-rows: minmax(30px, 50px) minmax(30px, 50px) auto; */
+    grid-template-rows: 1fr;
     grid-template-columns: 1fr;
     grid-template-areas:
-    "navbar"
-    "freeze-pane"
+    /* "navbar"
+    "freeze-pane" */
     "scroll-list"
     ;
 }
@@ -182,7 +191,7 @@ label{
 
 .scroller {
     margin: 0 auto;
-    height: 50rem;
+    height: 500px;
     width: 100%;
     overflow: auto;
     grid-area: scroll-list;
@@ -199,9 +208,13 @@ label{
     font-size: 1.5rem;
 }
 
-.test {
+.player-container {
     display: grid;
     grid-template-columns: 3fr 1fr 1fr;
     grid-template-rows: 1fr;
     grid-template-areas: "name pos ovr";
+}
+
+.dropdown {
+
 }
