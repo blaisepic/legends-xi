@@ -6,7 +6,11 @@ This is a nostalgia-driven single-page application built with React JS. The expr
 * To take a stroll down memory lane. In years past, I was able to play FIFA without feeling the compulsion to throw my controller at the TV. Simpler times.
 * To learn React
 
-![Image of my team](/public/Goldtrotters.png)
+##Image of the app
+![Image of Legends XI](/public/Goldtrotters.png)
+
+##Close-up of the team
+![Image of my team, Goldtrotters](/public/Goldtrotters-team.png)
 
 
 This project was built with the following tools:
