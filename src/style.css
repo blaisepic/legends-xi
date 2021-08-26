@@ -4,20 +4,55 @@ html, body {
     border: 0;
     font-size: 100%;
     font: inherit;
+    /* font-family: 'Courier New', Courier, monospace; */
+}
+
+* {
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .container {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 2fr 8fr;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr 8fr .5fr;
     grid-template-areas:
-    "team-info team-data"
-    "field player-data"
+    ".. navbar navbar .."
+    "ad1 title title .."
+    "ad1 team-info team-info .."
+    "ad field player-data .."
+    ".. .. .. .."
     ;
 
-    background-color:rebeccapurple;
+    background-color:#DDDDDD;
+}
+
+.title{
+    grid-area: title;
+    align-self: center;
+    justify-self: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 2.7rem;
+
+}
+
+.navbar {
+    grid-area: navbar;
+
+    display: flex;
+    flex-direction: row;
+    width: 35%;
+    justify-self: center;
+}
+
+li {
+    list-style-type: none;
+    color: #566B78;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 #container {
@@ -31,38 +66,35 @@ html, body {
 .team-info-container {
     grid-area: team-info;
     display: grid;
-    justify-items: end;
-    align-items: end;   
-    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    align-items: flex-start;
+    grid-template-columns: 1.1fr 1.1fr .9fr .9fr;   
     grid-template-areas:
-    "team-name"
-    "jersey-color"
+    "players-selected team-name simulator budget"
     ;
-    background-color: pink;
 }
 
-.field {
-    grid-area: field;
-    display: grid;
-    grid-template-rows: 2fr 2fr 1fr 2fr 2fr;
-    grid-template-areas:
-    "..."
-    "forwards"
-    "midfielders"
-    "defenders"
-    "goalkeeper"
-    ;
+.players-selected {
+    grid-area: players-selected;
+}
 
-    background: url("https://i.pinimg.com/originals/d7/b0/55/d7b05539aac8c5416c73ca046f977742.jpg") bottom center;
-    background-size: 70% 100%;
-    background-repeat: no-repeat;
+.budget {
+    grid-area: budget;
 }
 
 #teamInput {
-    background-color: red;
+    margin-left: .5rem;
     grid-area: team-name;
     width: 10vw;
     min-width: 50px;
+    height: 3vh;
+}
+
+.team-info {
+    font-size: 1.2rem;
+    color: #384750;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 #jerseyColor {
@@ -70,7 +102,7 @@ html, body {
 }
 
 label{
-    font-size: 2rem;
+    /* font-size: 2rem; */
 }
 
 .circle {
@@ -88,10 +120,60 @@ label{
     justify-self: center;
 }
 
-.goalkeeper {
+.advert{
+    /* background: url("https://www.soccerbible.com/media/40940/retor-ads-4.jpg") bottom center; */
+    background: url("https://i.pinimg.com/236x/a1/f5/31/a1f531a0d73dafdbcb74f6b3ead7c7d9--adidas-football-football-boots.jpg") bottom center;
+    grid-area: ad1;
+    width: 100%;
+    height: 100%;
+}
+
+.field {
+    grid-area: field;
+    display: grid;
+    grid-template-rows: .5fr .5fr .5fr .5fr .5fr;
+    grid-template-areas:
+    "..."
+    "forwards"
+    "midfielders"
+    "defenders"
+    "goalkeeper"
+    ;
+
+    background: url("https://i.pinimg.com/originals/d7/b0/55/d7b05539aac8c5416c73ca046f977742.jpg") bottom center;
+    background-size: 70% 100%;
+    background-repeat: no-repeat;
+}
+
+.scroller {
+    margin: 0 auto;
+    height: 93%;
+    /* width: 100%; */
+    width: 80%;
+    overflow: auto;
+    grid-area: table;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px repeat(auto-fill, 50px);
+    /* grid-auto-rows: 50px; */
+    grid-template-areas:
+    "dialog"
+    "table"
+    ;
+}
+
+.gk-flex {
     grid-area: goalkeeper;
-    justify-self: center;
-    align-self: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.goalkeeper {
+    margin: 5.3vh;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .defense {
@@ -103,7 +185,9 @@ label{
 
 .defender {
     margin: 5.3vh;
-    margin-bottom: 3vh;
+    margin-bottom: 0;
+    margin-top: 0;
+    /* margin-bottom: 3vh; */
 }
 
 .midfield {
@@ -115,6 +199,7 @@ label{
 .midfielder {
     margin: 4vh;
     margin-bottom: 0;
+    margin-top: 0;
 }
 
 .offense {
@@ -125,52 +210,56 @@ label{
 
 .forward {
     margin: 5.3vh;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    /* margin-bottom: 2rem; */
 }
 
-.team-data-container {
+/* .team-data-container {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-area: team-data;
+
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 
-    "players-selected submit"
-    "budget submit"
+    "players-selected"
+    "budget"
     ;
     background: gray;
-}
-
-.players-selected {
-    grid-area: players-selected;
-}
-
-.budget {
-    grid-area: budget;
-}
+} */
 
 .player-data-container {
     grid-area: player-data;
 
     display: grid;
-    /* grid-template-rows: minmax(30px, 50px) minmax(30px, 50px) auto; */
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
     grid-template-areas:
-    /* "navbar"
-    "freeze-pane" */
     "scroll-list"
     ;
 }
 
-.name {
-    /* grid-area: name; */
+.table-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .1fr 2fr;
+    grid-template-areas: 
+    "btn"
+    "table";
 }
 
-.pos {
-    /* grid-area: pos; */
+.add-player-btn > button{
+    background-color: rgb(255, 170, 200);
+    font-size: large;
+    margin-bottom: 1rem;
+    align-self: center;
+    justify-self: center;
+    grid-area: btn;
 }
 
-.ovr {
-    /* grid-area: ovr; */
+.add-player-btn {
+    align-self: center;
+    justify-self: center;
 }
 
 .freeze-pane {
@@ -189,17 +278,12 @@ label{
     font-size: 2rem;
 }
 
-.scroller {
-    margin: 0 auto;
-    height: 500px;
-    width: 100%;
-    overflow: auto;
-    grid-area: scroll-list;
+.dialog {
+    grid-area: dialog;
+}
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(auto-fill, 50px);
-    /* grid-auto-rows: 50px; */
+#table {
+    grid-area: table;
 }
 
 .item {
@@ -215,6 +299,72 @@ label{
     grid-template-areas: "name pos ovr";
 }
 
-.dropdown {
+.circle-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .2fr 1fr .5fr;
+    grid-template-areas:
+    "remove-btn"
+    "circle"
+    "text"
+    ;
+}
 
+.circleText {
+    align-self: center;
+    justify-self: center;
+    grid-area: text;
+}
+
+.remove-btn {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: .7rem;
+    height: 20px;
+    width: 20px;
+    grid-area: remove-btn;
+    margin-left: 20%;
+}
+
+thead > tr > th {
+    /* background-color: aqua !important; */
+    background-color: #cac7c7 !important;
+    border: solid black 1px;
+    padding: 0;
+    line-height: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+
+}
+
+.circleText {
+    font-weight: bold;
+}
+
+#simulation-btn > button{
+    font-size: large;
+    grid-area: simulator;
+    align-self: center;
+    justify-self: center;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+
+    appearance: button;
+    background-color: rgb(239, 239, 239);
+    border-color: rgb(118, 118, 118);
+    border: 2px outset;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-stretch: 100%;
+    font-weight: 0 !important;
+    line-height: 24px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: center;
+
+    /* width: 50px;
+    height: 50px; */
 }
