@@ -1,14 +1,12 @@
-A hefty work in progress. 
+# Legends XI
 
-Goal: 
-1) database of legends (pulled from fifa 21) and top players from previous fifas (I'm thinking fifa 05 and fifa 10)
-2) build a team given a budget of 100m. The choice of players consists of the retired players and modern players. Players are priced according to their overall. This works nicely because the legends and the past fifas are rated very highly. The cheaper players will consist of today's players. This way everybody knows the role players on their team and won't be randomly selecting role players from 15 years ago.
-3) clean, fantasy football esque GUI
-4) once team has been selected, you get placed into Champions League football. The tourney is then simulated. 
-5) The simulator will have to be basic at first and I will gradually upgrade it
+You are given 85m to build a squad from some of the most legendary football/soccer players that have graced the pitch. Your job is not merely to select the best players -- Pele, the most expensive player, would set you back 13m, leaving you with only 72m for the remaining 10 slots in your squad. Your job is to build a dream-team of players from football's rich past while staying under budget. You will have to make sacrifices in your squad, but each of these players is a legend for a reason, so it shouldn't hurt too much.
 
-This project uses:
-1) Python for web-scraping (I am here)
-2) Postgresql and pgAdmin for database management (might switch to MySQL, have to look into this once I've finished scraping)
-3) HTML, CSS, Javascript, and React for building out the GUI
-4) undecided choice of framework/language for the simulator, likely Python
+This is a nostalgia-driven single-page application built with React JS. The express purpose of *Legends XI* was twofold:
+* To take a stroll down memory lane. In years past, I was able to play FIFA without feeling the compulsion to throw my controller at the TV. Simpler times.
+* To learn React. This is my first foray into React, and my first personal project in web development that wasn't of Rock-Paper-Scissors difficulty. 
+
+This project was built with the following tools:
+1) Python for web-scraping data off of [FifaIndex.com](https://www.fifaindex.com/players/fifa05_1/?order_by=overallrating&order=0). See *scrapy.py*.
+2) Postgresql and pgAdmin for database management. In a rush for time, I switched this to JSON for more straightforward integration with the front-end. If I could go back and do it again, this would be one area of prioritization.
+3) HTML, CSS, and React for building out the GUI
