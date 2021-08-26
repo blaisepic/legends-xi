@@ -7,7 +7,14 @@ This is a nostalgia-driven single-page application built with React JS. The expr
 * To learn React and put my knowledge of it to the test. What better way to learn in this hyper-speed world of technology than to get right into the nitty gritty.
 
 ## Building a squad
-Build your squad from roughly 100 of football's royalty, the best to have ever done it. The players and their stats have been sourced from Fifa — particularly, Fifa 21 and Fifa 05. Fifa 21 for its curated list of legends included in Ultimate Team, about 15 players. Fifa 05 for its abundance of legendary players in a period of footballing glory days. These are the days of Los Galacticos ran by Zidane, Ronaldo, Roberto Carlos, Raul, Figo, Beckham, and more. These are the days of Barcelona starring Ronaldinho, Deco, Puyol, Eto, and more. These are the days of Alessandro Nesta, Maldini, Cafu, Kaka, and Shevchenko leading the charge for AC Milan. Football was ripe with superstars, and Legends XI transports you back to managing a team in that era of football greatness.
+Build your squad from roughly 100 of football's royalty, the best to have ever done it. The players and their stats have been sourced from Fifa — particularly, Fifa 21 and Fifa 05. Fifa 21 for its curated list of legends included in Ultimate Team, about 15 players. Fifa 05 for its abundance of legendary players in a period of footballing glory days. 
+
+These are the days of...
+* Los Galacticos ran by Zidane, Ronaldo, Roberto Carlos, Raul, Figo, Beckham, and more. 
+* Barcelona starring Ronaldinho, Deco, Puyol, Eto, and more.
+* Alessandro Nesta, Maldini, Cafu, Kaka, and Shevchenko leading the charge for AC Milan. 
+
+Football was ripe with superstars, and Legends XI transports you back to managing a team in that era of football greatness.
 ![Image of Legends XI](/public/Goldtrotters.png)
 
 ## Close-up of the Goldtrotters
